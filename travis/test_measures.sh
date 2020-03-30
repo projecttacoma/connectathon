@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd fhir-patient-generator
-git checkout ci-tool-makefile-param
+git checkout ci-param-tool-rebase
 make all all-r4 CI_TOOL=TRUE
 
 # Use make commands to test measures and/or
