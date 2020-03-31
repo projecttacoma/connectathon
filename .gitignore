@@ -74,3 +74,4 @@ fabric.properties
 /fhir4/input-cache/*.jar
 
 /travis/tooling/*.jar
+/travis/tooling/rebuildRun.log
