@@ -88,3 +88,4 @@ fabric.properties
 
 # Travis script artifacts
 /travis/tooling/*.jar
+/travis/tooling/rebuildRun.log
