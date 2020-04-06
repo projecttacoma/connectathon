@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "> Rebuilding Measure Bundles"
+echo "> Rebuilding Measure Bundles and Loading CQF-Ruler"
 if ! ./travis/rebuild_bundles.sh; then
   exit 1
 fi
