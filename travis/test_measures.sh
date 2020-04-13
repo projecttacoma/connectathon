@@ -6,8 +6,7 @@ if ! ./travis/rebuild_bundles.sh; then
 fi
 
 cd fhir-patient-generator
-git checkout ci-param-tool-rebase
-make all all-r4 CI_TOOL=true
+make all CI_TOOL=true
 
 # Use make commands to test measures and/or
 # compare calculation results against the
