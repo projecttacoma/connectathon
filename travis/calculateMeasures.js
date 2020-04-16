@@ -43,11 +43,54 @@ async function getCQFMeasureList() {
 async function getTestMeasureList() {
   let fpgDir = fs.readdirSync('./fhir-patient-generator/')
   let applicableMeasuresDirs = fpgDir.filter((dir) => { return dir.startsWith("EXM_") });
-  applicableMeasuresDirs.map((measureDir) => {
-    
+  let measureDirInfo = applicableMeasuresDirs.map((measureDir) => {
+    return {
+      exmId: measureDir,
+      path: `./fhir-patient-generator/${measureDir}/patients-r4`
+    }
   });
 
-  return applicableMeasuresDirs;
+  return measureDirInfo;
+}
+
+async function loadTestDataFolder(testDataFolder) {
+  // use data in all subfolders. ex. numerator, denominator, etc.
+  let subfolders = fs.readdirSync(testDataFolder, { withFileTypes: true })
+    .filter((dir) => { return dir.isDirectory() })
+    .map((dir) => { return dir.name })
+
+  for (let subfolder of subfolders) {
+    let subfolderPath = testDataFolder + '/' + subfolder;
+    console.log(subfolderPath);
+    let patientBundles = fs.readdirSync(subfolderPath)
+    for (let patientBundleName of patientBundles) {
+      if (!patientBundleName.endsWith(".json")) continue;
+      console.log(`${subfolderPath}/${patientBundleName}`)
+      await loadPatientBundle(`${subfolderPath}/${patientBundleName}`)
+    }
+  }
+}
+
+async function loadPatientBundle(patientBundlePath) {
+  return new Promise((resolve, reject) => {
+    let req = http.request("http://localhost:8080/cqf-ruler-r4/fhir",
+      {
+        method: 'POST',
+        headers: {
+          "Content-Type": 'application/json'
+        }
+      }, (res) => {
+        if (res.statusCode != 200) {
+          reject(`Status code ${res.statusCode} was unexpected when posting bundle.`);
+          return;
+        } else {
+          resolve();
+        }
+      });
+
+    let bundleStream = fs.createReadStream(patientBundlePath);
+    bundleStream.pipe(req);
+  });
 }
 
 async function calculateMeasures() {
@@ -55,6 +98,7 @@ async function calculateMeasures() {
   console.log(cqfMeasures);
   let testPatientMeasures = await getTestMeasureList();
   console.log(testPatientMeasures);
+  loadTestDataFolder('./fhir-patient-generator/EXM_124/patients-r4');
 }
 
 
