@@ -213,7 +213,10 @@ async function calculateMeasuresAndCompare() {
   console.log(testPatientMeasures);
 
   for (let testPatientMeasure of testPatientMeasures) {
-    if (testPatientMeasure.exmId != 'EXM_124') continue; // TODO remove this when ready to try with all measures
+    if (!testPatientMeasure.measureReportPath) {
+      console.log(`No Reference MeasureReport found for ${testPatientMeasure.exmId}`);
+      continue;
+    }
 
     let cqfMeasure = cqfMeasures.find((measure) => measure.exmId == testPatientMeasure.exmId)
     if (!cqfMeasure) {

@@ -49,8 +49,15 @@ function compareMeasureReports(referenceReport, report) {
       // grab lists of patients
       let referenceList = grabReferencedResource(referencePopulation.subjectResults.reference, referenceReport);
       let list = grabReferencedResource(population.subjectResults.reference, report);
+
+      // Turn into list of patient names from reference report
       let referencePatientNames = referenceList.entry.map((entry) => { return entry.item.display; });
-      let patientNames = list.entry.map((entry) => { return entry.item.display; });
+
+      // Turn into list of patient names from calculated report. default to [] if list is empty/nonexistent
+      let patientNames = [];
+      if (list.entry) {
+        patientNames = list.entry.map((entry) => { return entry.item.display; });
+      }
 
       // compare lists
       let missingPatients = referencePatientNames.filter((patientName) => { return !patientNames.includes(patientName) });
