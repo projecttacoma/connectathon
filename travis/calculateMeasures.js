@@ -53,7 +53,7 @@ async function getTestMeasureList() {
       exmId: measureDir,
       path: `./fhir-patient-generator/${measureDir}/patients-r4`
     };
-    let measureReportFile = fs.readdirSync(testDirInfo.path).find((filename) => { return filename.includes('measure-report')});
+    let measureReportFile = fs.readdirSync(testDirInfo.path).find((filename) => { return filename.includes('measure-report.json')});
     if (measureReportFile) {
       testDirInfo.measureReportPath = `${testDirInfo.path}/${measureReportFile}`;
     }
@@ -71,16 +71,19 @@ async function loadTestDataFolder(testDataFolder) {
 
   let bundleResourceInfos = [];
   for (let subfolder of subfolders) {
+    // skip measure-reports folder
+    if (subfolder == 'measure-reports') continue;
     let subfolderPath = testDataFolder + '/' + subfolder;
     let patientBundles = fs.readdirSync(subfolderPath)
     for (let patientBundleName of patientBundles) {
       if (!patientBundleName.endsWith(".json")) continue;
-      console.log(`Loading bundle ${subfolderPath}/${patientBundleName}`)
+      process.stdout.write('.');
+      //console.log(`Loading bundle ${subfolderPath}/${patientBundleName}`)
       let newResourceInfo = await loadPatientBundle(`${subfolderPath}/${patientBundleName}`)
       bundleResourceInfos.push(newResourceInfo);
     }
   }
-
+  console.log();
   return bundleResourceInfos;
 }
 
@@ -94,7 +97,7 @@ async function loadPatientBundle(patientBundlePath) {
         }
       }, (res) => {
         if (res.statusCode != 200) {
-          reject(`Status code ${res.statusCode} was unexpected when posting bundle.`);
+          reject(`Status code ${res.statusCode} was unexpected when posting bundle. ${patientBundlePath}`);
           return;
         }
 
@@ -120,9 +123,11 @@ async function loadPatientBundle(patientBundlePath) {
 
 async function deleteBundleResources(bundleResourceInfos) {
   for (let bundleResourceInfo of bundleResourceInfos) {
-    console.log("Deleting resources from " + bundleResourceInfo.originalBundle)
+    process.stdout.write('.');
+    //console.log("Deleting resources from " + bundleResourceInfo.originalBundle)
     await deleteResources(bundleResourceInfo.resources);
   }
+  console.log();
 }
 
 async function deleteResources(resourcesToDelete) {
@@ -175,12 +180,16 @@ async function loadReferenceMeasureReport(measureReportPath) {
 
 async function getMeasureReport(measureId) {
   return new Promise((resolve, reject) => {
+    let dotTimer;
     console.log(`Executing measure ${measureId}`);
     let req = http.request(`http://localhost:8080/cqf-ruler-r4/fhir/Measure/${measureId}/$evaluate-measure?reportType=patient-list&periodStart=${PERIOD_START}&periodEnd=${PERIOD_END}`,
       {
         method: 'GET',
-        timeout: 480 //8 minute timeout because this is slooooow
+        timeout: 2400000 //40 minute timeout because this is slow for some measures.
       }, (res) => {
+        clearInterval(dotTimer);
+        console.log();
+        console.timeEnd(`Execute ${measureId}`);
         if (res.statusCode != 200) {
           reject(`Status code ${res.statusCode} was unexpected when posting bundle.`);
           return;
@@ -200,6 +209,9 @@ async function getMeasureReport(measureId) {
       reject(e);
     });
     req.end();
+    console.time(`Execute ${measureId}`);
+    // Dots are required to keep travis from giving up.
+    dotTimer = setInterval(() => { process.stdout.write('.') }, 10000);
   });
 }
 

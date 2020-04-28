@@ -13,7 +13,7 @@ function findCorrespondingPopulation(referencePopulation, group) {
 
 function grabReferencedResource(reference, report) {
   let id = reference.replace('#', '');
-  return report.contained.find((resource) => { return resource.id = id });
+  return report.contained.find((resource) => { return resource.id == id });
 }
 
 function addBadPatientEntry(badPatientsList, patientName, issueMessage) {
@@ -50,8 +50,11 @@ function compareMeasureReports(referenceReport, report) {
       let referenceList = grabReferencedResource(referencePopulation.subjectResults.reference, referenceReport);
       let list = grabReferencedResource(population.subjectResults.reference, report);
 
-      // Turn into list of patient names from reference report
-      let referencePatientNames = referenceList.entry.map((entry) => { return entry.item.display; });
+      // Turn into list of patient names from reference report, default to [] if list is empty/nonexistent
+      let referencePatientNames = [];
+      if (referenceList.entry) {
+        referencePatientNames = referenceList.entry.map((entry) => { return entry.item.display; });
+      }
 
       // Turn into list of patient names from calculated report. default to [] if list is empty/nonexistent
       let patientNames = [];
