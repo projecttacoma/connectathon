@@ -218,16 +218,40 @@ async function getMeasureReport(measureId) {
 
 
 async function calculateMeasuresAndCompare() {
+  // look for an argument on the command line to indicate the only measure to run. i.e. EXM_105
+  let onlyMeasureExmId;
+  if (process.argv[2]) {
+    onlyMeasureExmId = process.argv[2];
+    console.log(`Only running ${onlyMeasureExmId}`);
+  }
+
+  // grab info on measures in cqf-ruler and measures in test data
   let measureDiffInfo = [];
   let cqfMeasures = await getCQFMeasureList();
-  console.log(cqfMeasures);
   let testPatientMeasures = await getTestMeasureList();
-  console.log(testPatientMeasures);
 
+  // if we are testing only one measure check it exists in both test data and cqf-ruler
+  if (onlyMeasureExmId &&
+    (!cqfMeasures.some((cqfMeasure) => cqfMeasure.exmId == onlyMeasureExmId) ||
+    !testPatientMeasures.some((testMeasure) => testMeasure.exmId == onlyMeasureExmId))) {
+      throw new Error(`Measure ${onlyMeasureExmId} was not found in cqf-ruler or in test data and was the only measure requested.`)
+  }
+
+  // iterate over test data measures
   for (let testPatientMeasure of testPatientMeasures) {
+    // skip if this isn't the only one we should run
+    if (onlyMeasureExmId && testPatientMeasure.exmId != onlyMeasureExmId) continue;
+
+    // check if there is a MeasureReport to compare to
     if (!testPatientMeasure.measureReportPath) {
       console.log(`No Reference MeasureReport found for ${testPatientMeasure.exmId}`);
-      continue;
+
+      // if we are only runing one measure throw an error if we cannot find the report
+      if (onlyMeasureExmId) {
+        throw new Error(`Measure ${onlyMeasureExmId} does not have a reference MeasureReport and was the only measure requested.`)
+      } else {
+        continue;
+      }
     }
 
     let cqfMeasure = cqfMeasures.find((measure) => measure.exmId == testPatientMeasure.exmId)

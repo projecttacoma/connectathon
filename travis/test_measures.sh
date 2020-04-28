@@ -11,4 +11,4 @@ fi
 # compare calculation results against the
 # existing patient sets.
 
-node ./travis/calculateMeasures.js
+node ./travis/calculateMeasures.js $1
