@@ -76,7 +76,7 @@ define "Denominator Exclusion":
 define "Numerator":
 	TJC."Ischemic Stroke Encounter" IschemicStrokeEncounter
 		with "Antithrombotic Therapy at Discharge" DischargeAntithrombotic
-			such that DischargeAntithrombotic.authoredOn during Global."Normalize Interval"(IschemicStrokeEncounter.period)
+			such that DischargeAntithrombotic.authoredOn before start of Global."Normalize Interval"(IschemicStrokeEncounter.period)
 
 define "Antithrombotic Therapy at Discharge":
 	["MedicationRequest": medication in "Antithrombotic Therapy"] Antithrombotic
