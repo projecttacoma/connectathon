@@ -7,8 +7,8 @@ echo "> Fetching CQF-tooling JAR"
 ./travis/download_cqf_tooling.sh
 
 echo "> Setting Up cqf-ruler docker instance"
-docker pull contentgroup/cqf-ruler:develop
-docker run --name cqf-ruler --rm -dit -p 8080:8080 contentgroup/cqf-ruler:develop
+docker pull tacoma/cg-cqf-ruler:created-4.20.20
+docker run --name cqf-ruler --rm -dit -p 8080:8080 tacoma/cg-cqf-ruler:created-4.20.20
 
 echo "> Waiting for cqf-ruler to start up"
 until `curl --output /dev/null --silent --head --fail http://localhost:8080/cqf-ruler-r4`; do printf '.'; sleep 5; done
