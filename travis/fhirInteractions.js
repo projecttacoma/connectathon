@@ -185,7 +185,7 @@ async function getMeasureReport(measureId) {
         console.log();
         console.timeEnd(`Execute ${measureId}`); // print out how long this took.
         if (res.statusCode != 200) {
-          reject(`Status code ${res.statusCode} was unexpected when posting bundle.`);
+          reject(`Status code ${res.statusCode} was unexpected when executing.`);
           return;
         } else {
           res.setEncoding('utf8');
