@@ -45,7 +45,8 @@ async function calculateMeasuresAndCompare() {
     // Grab the corresponding information about the cqf-ruler measure
     let cqfMeasure = cqfMeasures.find((measure) => measure.exmId == testPatientMeasure.exmId);
     if (!cqfMeasure) {
-      console.log(`Measure ${testPatientMeasure.exmId} not found in cqf-ruler.`);
+      console.log(`Measure ${testPatientMeasure.exmId} not found in cqf-ruler. Skipping.`);
+      continue;
     }
 
     // Load up all test patients for this measure.
