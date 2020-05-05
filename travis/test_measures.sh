@@ -5,8 +5,5 @@ if ! ./travis/rebuild_bundles.sh; then
   exit 1
 fi
 
-# Use make commands to test measures and/or
-# compare calculation results against the
-# existing patient sets.
-
+echo "> Starting Calculation and Comparison of MeasureReports"
 node ./travis/calculateMeasures.js $1
