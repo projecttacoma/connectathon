@@ -54,18 +54,18 @@ async function calculateMeasuresAndCompare() {
     let bundleResourceInfos = await testDataHelpers.loadTestDataFolder(testPatientMeasure.path);
 
     // Execute the measure, i.e. get the MeasureReport from cqf-ruler
-    let report = await fhirInteractions.getMeasureReport(cqfMeasure.id)
+    let report = await fhirInteractions.getMeasureReport(cqfMeasure.id);
     // Load the reference report from the test data
     let referenceReport = await testDataHelpers.loadReferenceMeasureReport(testPatientMeasure.measureReportPath);
 
     // Compare measure reports and get the list of information about patients with discrepancies
-    let badPatients = measureReportCompare.compareMeasureReports(referenceReport, report)
+    let badPatients = measureReportCompare.compareMeasureReports(referenceReport, report);
 
     // Add to the measure info to print at the end
     measureDiffInfo.push({
       exmId: testPatientMeasure.exmId,
       badPatients: badPatients
-    })
+    });
 
     // Clean up the test patients so they don't pollute the next test.
     console.log(`Removing test data for ${testPatientMeasure.exmId}`);
@@ -95,7 +95,7 @@ calculateMeasuresAndCompare()
         measureDiff.badPatients.forEach((patient) => {
           console.log(`|- ${patient.patientName}`);
           patient.issues.forEach((issue) => {
-            console.log(`|   ${issue}`)
+            console.log(`|   ${issue}`);
           });
         });
 
