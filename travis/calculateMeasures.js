@@ -67,9 +67,13 @@ async function calculateMeasuresAndCompare() {
       badPatients: badPatients
     });
 
-    // Clean up the test patients so they don't pollute the next test.
-    console.log(`Removing test data for ${testPatientMeasure.exmId}`);
-    await testDataHelpers.deleteBundleResources(bundleResourceInfos);
+    // Clean up the test patients so they don't pollute the next measure test.
+    if (!onlyMeasureExmId) {
+      console.log(`Removing test data for ${testPatientMeasure.exmId}`);
+      await testDataHelpers.deleteBundleResources(bundleResourceInfos);
+    } else {
+      console.log('Test data will not be removed since this is a single measure run.');
+    }
   }
 
   return measureDiffInfo;

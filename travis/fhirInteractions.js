@@ -55,7 +55,7 @@ async function getCQFMeasureList() {
             };
           });
 
-          console.log(measureListing);
+          //console.log(measureListing);
           resolve(measureListing);
         } catch (e) {
           reject(`Failed to parse result from cqf-ruler: ${e.message}`);
