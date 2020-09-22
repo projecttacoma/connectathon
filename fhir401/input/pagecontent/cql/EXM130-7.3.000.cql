@@ -51,6 +51,12 @@ define "SDE Sex":
 define "Denominator":
 	true
 
+define "Stratification 1":
+    true
+
+define "Stratification 2":
+    false
+
 define "Flexible Sigmoidoscopy Performed":
 	[Procedure: "Flexible Sigmoidoscopy"] FlexibleSigmoidoscopy
 		where FlexibleSigmoidoscopy.status = 'completed'

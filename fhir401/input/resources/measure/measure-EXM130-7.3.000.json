@@ -166,6 +166,27 @@
       }
     } ]
   } ],
+  "stratifier": [ {
+    "code": {
+      "text": "stratification-1"
+    },
+    "description": "Example strat 1",
+    "criteria": {
+      "name": "stratification-1",
+      "language": "text/cql",
+      "expression": "Stratification 1"
+    }
+  }, {
+    "code": {
+      "text": "stratification-2"
+    },
+    "description": "Example strat 2",
+    "criteria": {
+      "name": "stratification-2",
+      "language": "text/cql",
+      "expression": "Stratification 2"
+    }
+  } ],
   "supplementalData": [ {
     "code": {
       "text": "sde-ethnicity"
