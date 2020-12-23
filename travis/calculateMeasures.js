@@ -30,6 +30,18 @@ async function calculateMeasuresAndCompare() {
     // Skip if we are in run one mode and this is not the only one we should run
     if (onlyMeasureExmId && testPatientMeasure.exmId != onlyMeasureExmId) continue;
 
+    // Check if there are any apparent errors with the test data directory
+    if (testPatientMeasure.error) {
+      console.log(testPatientMeasure.error)
+
+      // If we are only runing one measure throw an error if we cannot find the report, otherwise skip to the next one
+      if (onlyMeasureExmId) {
+        throw new Error(`Measure ${onlyMeasureExmId} has an error with test data: ${testPatientMeasure.error}`)
+      } else {
+        continue;
+      }
+    }
+
     // Check if there is a MeasureReport to compare to
     if (!testPatientMeasure.measureReportPath) {
       console.log(`No Reference MeasureReport found for ${testPatientMeasure.exmId}`);

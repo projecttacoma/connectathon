@@ -30,9 +30,15 @@ async function getTestMeasureList() {
       exmId: measureDir.includes('-') ? measureDir.split('-')[0] : measureDir,
       path: `./fhir-patient-generator/${measureDir}/patients-r4`
     };
-    let measureReportFile = fs.readdirSync(testDirInfo.path).find((filename) => { return filename.includes('measure-report.json')});
-    if (measureReportFile) {
-      testDirInfo.measureReportPath = `${testDirInfo.path}/${measureReportFile}`;
+    // if there is a patients-r4 folder look for measurereport
+    if (fs.existsSync(testDirInfo.path)) {
+      let measureReportFile = fs.readdirSync(testDirInfo.path).find((filename) => { return filename.includes('measure-report.json')});
+      if (measureReportFile) {
+        testDirInfo.measureReportPath = `${testDirInfo.path}/${measureReportFile}`;
+      }
+    } else {
+      testDirInfo.path = undefined;
+      testDirInfo.error = `No patient data folder found.`
     }
     return testDirInfo;
   });
