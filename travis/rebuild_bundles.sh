@@ -1,6 +1,6 @@
 #!/bin/bash
 
-tooling_jar=./travis/tooling/tooling-1.3.0-SNAPSHOT-jar-with-dependencies.jar
+tooling_jar=./travis/tooling/tooling-1.3.1-SNAPSHOT-jar-with-dependencies.jar
 rebuild_log=./travis/tooling/rebuildRun.log
 ig_resource_path=./fhir401/input/connectathon.xml
 
