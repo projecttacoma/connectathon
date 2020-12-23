@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: Measure CI
 on: [pull_request]
 
 jobs:
