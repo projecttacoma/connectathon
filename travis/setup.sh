@@ -2,6 +2,9 @@
 
 echo "> Cloning FHIR Generated Patients..."
 git clone --single-branch --branch master https://github.com/projecttacoma/fhir-patient-generator.git
+cd fhir-patient-generator
+git pull
+cd ..
 
 echo "> Fetching CQF-tooling JAR"
 ./travis/download_cqf_tooling.sh
