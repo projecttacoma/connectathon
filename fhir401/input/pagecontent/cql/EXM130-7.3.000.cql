@@ -86,7 +86,7 @@ define "Colonoscopy Performed":
 	[Procedure: "Colonoscopy"] Colonoscopy
 		where Colonoscopy.status = 'completed'
 		  and Global."Normalize Interval"(Colonoscopy.performed) 
-        ends 10 years or less on or before end of "Measurement Period"
+                    ends 10 years or less on or before end of "Measurement Period"
 
 define "Numerator":
 	exists "Colonoscopy Performed"
