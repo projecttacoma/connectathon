@@ -85,7 +85,8 @@ define "Fecal Immunochemical Test DNA":
 define "Colonoscopy Performed":
 	[Procedure: "Colonoscopy"] Colonoscopy
 		where Colonoscopy.status = 'completed'
-		  and Global."Normalize Interval"(Colonoscopy.performed) ends 10 years or less on or before end of "Measurement Period"
+		  and Global."Normalize Interval"(Colonoscopy.performed) 
+        ends 10 years or less on or before end of "Measurement Period"
 
 define "Numerator":
 	exists "Colonoscopy Performed"
